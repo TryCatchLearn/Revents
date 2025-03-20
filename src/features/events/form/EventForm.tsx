@@ -1,14 +1,12 @@
 import { users } from "../../../lib/data/sampleData";
+import { useAppDispatch, useAppSelector } from "../../../lib/stores/store";
 import { AppEvent } from "../../../lib/types";
+import { closeForm, createEvent, updateEvent } from "../eventSlice";
 
-type Props = {
-  setFormOpen: (isOpen: boolean) => void;
-  createEvent: (event: AppEvent) => void;
-  selectedEvent: AppEvent | null;
-  updateEvent: (event: AppEvent) => void;
-}
+export default function EventForm() {
+  const dispatch = useAppDispatch();
+  const selectedEvent = useAppSelector(state => state.event.selectedEvent);
 
-export default function EventForm({ setFormOpen, createEvent, selectedEvent, updateEvent }: Props) {
   const initialValues = selectedEvent ?? {
     title: '',
     category: '',
@@ -22,11 +20,11 @@ export default function EventForm({ setFormOpen, createEvent, selectedEvent, upd
     const data = Object.fromEntries(formData.entries()) as unknown as AppEvent;
 
     if (selectedEvent) {
-      updateEvent({ ...selectedEvent, ...data });
-      setFormOpen(false);
+      dispatch(updateEvent({ ...selectedEvent, ...data }));
+      dispatch(closeForm())
       return;
     } else {
-      createEvent({
+      dispatch(createEvent({
         ...data,
         id: crypto.randomUUID(),
         hostUid: users[0].uid,
@@ -36,8 +34,8 @@ export default function EventForm({ setFormOpen, createEvent, selectedEvent, upd
           photoURL: users[0].photoURL,
           isHost: true,
         }],
-      });
-      setFormOpen(false);
+      }));
+      dispatch(closeForm())
     }
 
   }
@@ -82,7 +80,7 @@ export default function EventForm({ setFormOpen, createEvent, selectedEvent, upd
           type="text"
           className="input input-lg w-full" placeholder="Venue" />
         <div className="flex justify-end w-full gap-3">
-          <button onClick={() => setFormOpen(false)} type="button" className="btn btn-neutral">Cancel</button>
+          <button onClick={() => dispatch(closeForm())} type="button" className="btn btn-neutral">Cancel</button>
           <button type="submit" className="btn btn-primary">Submit</button>
         </div>
       </form>
