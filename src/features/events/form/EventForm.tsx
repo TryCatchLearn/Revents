@@ -1,10 +1,8 @@
 import { useNavigate, useParams } from "react-router";
 import { users } from "../../../lib/data/sampleData";
-import { useAppDispatch, useAppSelector } from "../../../lib/stores/store";
-import { AppEvent } from "../../../lib/types";
-import { createEvent, selectEvent, updateEvent } from "../eventSlice";
+import { AppEvent, FirestoreAppEvent } from "../../../lib/types";
 import { useEffect } from "react";
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import TextInput from "../../../app/shared/components/TextInput";
 import { eventFormSchema, EventFormSchema } from "../../../lib/schemas/eventFormSchema";
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,12 +10,17 @@ import TextArea from "../../../app/shared/components/TextArea";
 import SelectInput from "../../../app/shared/components/SelectInput";
 import { categoryOptions } from "./categoryOptions";
 import PlaceInput from "../../../app/shared/components/PlaceInput";
+import { useDocument } from "../../../lib/hooks/useDocument";
+import { useFirestoreActions } from "../../../lib/hooks/useFirestoreActions";
+import { Timestamp } from "firebase/firestore";
+import { handleError } from "../../../lib/util/util";
 
 export default function EventForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const dispatch = useAppDispatch();
-  const selectedEvent = useAppSelector(state => state.event.selectedEvent);
+  const { data: selectedEvent, loading } = useDocument<AppEvent>({ path: 'events', id });
+  const { update, submitting, create } = useFirestoreActions<FirestoreAppEvent>({ path: 'events' });
+
   const { control, handleSubmit, reset, formState: { isValid } }
     = useForm<EventFormSchema>({
       mode: 'onTouched',
@@ -25,55 +28,61 @@ export default function EventForm() {
     });
 
   useEffect(() => {
-    if (id) {
-      dispatch(selectEvent(id));
-      if (selectedEvent) {
-        reset({
-          ...selectedEvent,
-          date: new Date(selectedEvent.date).toISOString().slice(0, 16),
-          venue: {
-            venue: selectedEvent.venue,
-            latitude: selectedEvent.latitude,
-            longitude: selectedEvent.longitude,
-          }
-        })
-      }
-    } else {
-      dispatch(selectEvent(null));
-    }
-  }, [dispatch, id, selectedEvent, reset]);
-
-  const onSubmit = (data: FieldValues) => {
     if (selectedEvent) {
-      dispatch(updateEvent({ 
-        ...selectedEvent, 
-        ...data,
-        venue: data.venue.venue,
-        latitude: data.venue.latitude,
-        longitude: data.venue.longitude,
-      }));
-      navigate(`/events/${selectedEvent.id}`);
-      return;
-    } else {
-      const id = crypto.randomUUID();
-      const newEvent = {
-        ...data,
-        id,
-        venue: data.venue.venue,
-        latitude: data.venue.latitude,
-        longitude: data.venue.longitude,
-        hostUid: users[0].uid,
-        attendees: [{
-          id: users[0].uid,
-          displayName: users[0].displayName,
-          photoURL: users[0].photoURL,
-          isHost: true,
-        }]
-      }
-      dispatch(createEvent(newEvent as AppEvent));
-      navigate(`/events/${id}`);
+      reset({
+        ...selectedEvent,
+        date: selectedEvent.date.slice(0, 16),
+        venue: {
+          venue: selectedEvent.venue,
+          latitude: selectedEvent.latitude,
+          longitude: selectedEvent.longitude,
+        }
+      })
+    }
+  }, [id, selectedEvent, reset]);
+
+  const processFormData = (data: EventFormSchema) => {
+    return {
+      ...data,
+      date: Timestamp.fromDate(new Date(data.date)),
+      venue: data.venue.venue,
+      latitude: data.venue.latitude,
+      longitude: data.venue.longitude,
     }
   }
+
+  const onSubmit = async (data: EventFormSchema) => {
+    try {
+      if (selectedEvent) {
+        await update(selectedEvent.id, {
+          ...selectedEvent,
+          ...data,
+          ...processFormData(data)
+        });
+        navigate(`/events/${selectedEvent.id}`);
+        return;
+      } else {
+        const newEvent = {
+          ...data,
+          ...processFormData(data),
+          hostUid: users[0].uid,
+          attendees: [{
+            id: users[0].uid,
+            displayName: users[0].displayName,
+            photoURL: users[0].photoURL,
+            isHost: true,
+          }],
+          attendeeIds: [users[0].uid],
+        }
+        const ref = await create(newEvent as FirestoreAppEvent);
+        navigate(`/events/${ref.id}`);
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  if (loading) return <div>Loading...</div>
 
   return (
     <div className="card bg-base-100 p-4 flex flex-col gap-3 w-full">
@@ -117,9 +126,13 @@ export default function EventForm() {
         <div className="flex justify-end w-full gap-3">
           <button onClick={() => navigate(-1)} type="button" className="btn btn-neutral">Cancel</button>
           <button
-            disabled={!isValid}
+            disabled={!isValid || submitting}
             type="submit"
-            className="btn btn-primary">Submit</button>
+            className="btn btn-primary">
+            {submitting &&
+              <span className="loading loading-spinner"></span>}
+            Submit
+          </button>
         </div>
       </form>
     </div>

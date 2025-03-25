@@ -1,8 +1,7 @@
 import { Fragment } from "react/jsx-runtime";
-import { useAppSelector } from "../../../lib/stores/store";
+import { AppEvent } from "../../../lib/types";
 
-export default function EventDetailedSidebar() {
-    const event = useAppSelector(state => state.event.selectedEvent);
+export default function EventDetailedSidebar({event}: {event: AppEvent}) {
 
     return (
         <div className="card bg-base-100">
