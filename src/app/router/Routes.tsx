@@ -5,6 +5,7 @@ import EventDashboard from "../../features/events/dashboard/EventDashboard";
 import EventDetails from "../../features/events/details/EventDetails";
 import EventForm from "../../features/events/form/EventForm";
 import LoginForm from "../../features/account/LoginForm";
+import RegisterForm from "../../features/account/RegisterForm";
 
 export const router = createBrowserRouter([
     {
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
             {path: 'manage/:id', element: <EventForm />},
             {path: 'createEvent', element: <EventForm />},
             {path: 'login', element: <LoginForm />},
+            {path: 'register', element: <RegisterForm />},
         ]
     }
 ])

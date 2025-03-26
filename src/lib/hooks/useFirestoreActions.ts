@@ -23,6 +23,18 @@ export const useFirestoreActions = <T extends DocumentData>({path}: Options) => 
         }
     }
 
+    const setDocument = async (id: string, data: T) => {
+        setSubmitting(true);
+        try {
+            await setDoc(doc(db, path, id), data);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
     const update = async (id: string, data: T) => {
         setSubmitting(true);
         try {
@@ -49,5 +61,5 @@ export const useFirestoreActions = <T extends DocumentData>({path}: Options) => 
         }
     }
 
-    return {create, update, remove, submitting};
+    return {create, update, remove, setDocument, submitting};
 }

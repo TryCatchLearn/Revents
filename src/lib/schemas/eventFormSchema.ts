@@ -15,14 +15,7 @@ export const eventFormSchema = z.object({
     category: requiredString('Category'),
     description: requiredString('Description').min(5,
         'Description must be at least 5 characters'),
-    date: requiredString('Date')
-        .refine((value) => {
-            const selectedDate = new Date(value);
-            return selectedDate > new Date();
-        }, {
-            message: 'Date must be in the future'
-        })
-    ,
+    date: requiredString('Date'),
     city: z.string().optional(),
     venue: venueSchema,
 });

@@ -1,24 +1,34 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router"
-import { LoginSchema, loginSchema } from "../../lib/schemas/loginSchema";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
 import TextInput from "../../app/shared/components/TextInput";
 import { handleError } from "../../lib/util/util";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../lib/firebase/firebase";
 import CenteredCard from "../../app/shared/components/CenteredCard";
-import SocialLogin from "./SocialLogin";
+import { registerSchema, RegisterSchema } from "../../lib/schemas/registerSchema";
+import { useFirestoreActions } from "../../lib/hooks/useFirestoreActions";
+import { Timestamp } from "firebase/firestore";
 
-export default function LoginForm() {
+export default function RegisterForm() {
+    const {setDocument} = useFirestoreActions({path: 'profiles'});
     const navigate = useNavigate();
-    const { control, handleSubmit, formState: { isValid, isSubmitting } } = useForm({
-        resolver: zodResolver(loginSchema),
+    const { control, handleSubmit, formState: { isValid, isSubmitting } } = useForm<RegisterSchema>({
+        resolver: zodResolver(registerSchema),
     });
 
-    const onSubmit = async (data: LoginSchema) => {
+    const onSubmit = async (data: RegisterSchema) => {
         try {
-            await signInWithEmailAndPassword(auth, data.email, data.password);
+            const result = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            await updateProfile(result.user, {
+                displayName: data.displayName
+            });
+            await setDocument(result.user.uid, {
+                displayName: data.displayName,
+                email: data.email,
+                createdAt: Timestamp.now(),
+            })
             navigate('/events');
         } catch (error) {
             handleError(error);
@@ -28,9 +38,14 @@ export default function LoginForm() {
     return (
         <CenteredCard
             icon={LockClosedIcon}
-            title="Sign in"
+            title="Register"
         >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <TextInput
+                    label="Display name"
+                    control={control}
+                    name='displayName'
+                />
                 <TextInput
                     label="Email address"
                     control={control}
@@ -48,10 +63,8 @@ export default function LoginForm() {
                     type='submit'
                 >
                     {isSubmitting && <span className="loading loading-spinner"></span>}
-                    Sign in
+                    Register
                 </button>
-                <div className="divider">OR</div>
-                <SocialLogin />
             </form>
         </CenteredCard>
     )
