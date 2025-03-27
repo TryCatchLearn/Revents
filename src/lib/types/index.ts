@@ -8,6 +8,16 @@ export type AppUser = {
     providerId: string;
 }
 
+export type Profile = {
+    id: string;
+    photoURL?: string;
+    displayName: string;
+    createdAt: string;
+    description: string;
+    followersCount: number;
+    followingCount: number;
+}
+
 export type AppEvent = {
     id: string;
     title: string;
@@ -19,6 +29,7 @@ export type AppEvent = {
     latitude: number;
     longitude: number;
     hostUid: string;
+    isCancelled: boolean;
     attendees: Attendee[];
     attendeeIds: string[];
 }

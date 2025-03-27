@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^2.6.1",
     "@tailwindcss/vite": "^4.0.14",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "firebase": "^11.5.0",
     "firebase-admin": "^13.2.0",
     "leaflet": "^1.9.4",

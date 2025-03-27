@@ -1,6 +1,6 @@
 import { collection, DocumentData, onSnapshot } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "../stores/store";
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useRef, useSyncExternalStore } from "react";
 import { db } from "../firebase/firebase";
 import { setCollections, setError, setLoading } from "../firebase/firestoreSlice";
 import { toast } from "react-toastify";
@@ -15,12 +15,17 @@ export const useCollection = <T extends DocumentData>({ path, listen = true }: O
     const dispatch = useAppDispatch();
     const collectionData = useAppSelector(state => state.firestore.collections[path]) as T[];
     const loading = useAppSelector(state => state.firestore.loading);
+    const hasSetLoading = useRef(false);
+    const loadedInitial = useRef(false);
 
     const subscribeToCollection = useCallback(() => {
         if (!listen) return () => {}; // no-op
 
-        dispatch(setLoading(true));
-
+        if (!hasSetLoading.current) {
+            dispatch(setLoading(true));
+            hasSetLoading.current = true;
+        }
+        
         const colRef = collection(db, path);
         
         const unsubscribe = onSnapshot(colRef, (snapshot) => {
@@ -31,11 +36,13 @@ export const useCollection = <T extends DocumentData>({ path, listen = true }: O
             });
             dispatch(setCollections({ path, data }));
             dispatch(setLoading(false));
+            loadedInitial.current = true;
         }, (error) => {
             console.log(error);
             dispatch(setLoading(false));
             dispatch(setError(error.message));
             toast.error(error.message);
+            loadedInitial.current = true;
         });
 
         return () => {
@@ -45,5 +52,5 @@ export const useCollection = <T extends DocumentData>({ path, listen = true }: O
 
     useSyncExternalStore(subscribeToCollection, () => collectionData);
 
-    return { data: collectionData, loading };
+    return { data: collectionData, loading, loadedInitial: loadedInitial.current };
 }

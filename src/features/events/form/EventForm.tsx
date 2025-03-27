@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from "react-router";
-import { users } from "../../../lib/data/sampleData";
 import { AppEvent, FirestoreAppEvent } from "../../../lib/types";
 import { useEffect } from "react";
 import { useForm } from 'react-hook-form';
@@ -14,9 +13,11 @@ import { useDocument } from "../../../lib/hooks/useDocument";
 import { useFirestoreActions } from "../../../lib/hooks/useFirestoreActions";
 import { Timestamp } from "firebase/firestore";
 import { handleError } from "../../../lib/util/util";
+import { useAppSelector } from "../../../lib/stores/store";
 
 export default function EventForm() {
   const navigate = useNavigate();
+  const currentUser = useAppSelector(state => state.account.user);
   const { id } = useParams<{ id: string }>();
   const { data: selectedEvent, loading } = useDocument<AppEvent>({ path: 'events', id });
   const { update, submitting, create } = useFirestoreActions<FirestoreAppEvent>({ path: 'events' });
@@ -52,6 +53,7 @@ export default function EventForm() {
   }
 
   const onSubmit = async (data: EventFormSchema) => {
+    if (!currentUser) return;
     try {
       if (selectedEvent) {
         await update(selectedEvent.id, {
@@ -65,14 +67,14 @@ export default function EventForm() {
         const newEvent = {
           ...data,
           ...processFormData(data),
-          hostUid: users[0].uid,
+          hostUid: currentUser.uid,
           attendees: [{
-            id: users[0].uid,
-            displayName: users[0].displayName,
-            photoURL: users[0].photoURL,
+            id: currentUser.uid,
+            displayName: currentUser.displayName,
+            photoURL: currentUser?.photoURL,
             isHost: true,
           }],
-          attendeeIds: [users[0].uid],
+          attendeeIds: [currentUser.uid],
         }
         const ref = await create(newEvent as FirestoreAppEvent);
         navigate(`/events/${ref.id}`);

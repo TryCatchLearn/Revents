@@ -25,7 +25,7 @@ export default function UserMenu() {
                 <span>{user?.displayName}</span>
             </div>
             <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                <li>
+                <li onClick={() => navigate(`/profiles/${user?.uid}`)}>
                     <div className="flex gap-3 items-center">
                         <UserIcon className="size-6" />
                         My Profile

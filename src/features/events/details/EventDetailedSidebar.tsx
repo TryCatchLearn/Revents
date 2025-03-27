@@ -1,5 +1,5 @@
-import { Fragment } from "react/jsx-runtime";
 import { AppEvent } from "../../../lib/types";
+import { Link } from "react-router";
 
 export default function EventDetailedSidebar({event}: {event: AppEvent}) {
 
@@ -12,7 +12,7 @@ export default function EventDetailedSidebar({event}: {event: AppEvent}) {
                 <div className="flex flex-col gap-3">
 
                     {event?.attendees.map((attendee, index) => (
-                        <Fragment key={attendee.id}>
+                        <Link to={`/profiles/${attendee.id}`} key={attendee.id}>
                             <div className="flex gap-3 align-middle justify-between items-center">
                                 <div className="flex gap-3 items-center">
                                     <div className="avatar">
@@ -29,7 +29,7 @@ export default function EventDetailedSidebar({event}: {event: AppEvent}) {
                             {index < event.attendees.length - 1 && (
                                 <div className="divider my-0"></div>
                             )}
-                        </Fragment>
+                        </Link>
 
                     ))}
 
