@@ -36,7 +36,7 @@ export default function ProfileContent({ profile }: { profile: Profile }) {
             case 'photos':
                 return <ProfilePhotos profile={profile} editMode={editMode} />;
             case 'events':
-                return <ProfileEvents />;
+                return <ProfileEvents profile={profile} />;
             case 'members':
                 return <ProfileMembers />;
             default:

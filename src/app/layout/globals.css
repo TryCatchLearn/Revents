@@ -39,3 +39,16 @@
 a.active {
   @apply text-accent;
 }
+
+@layer components {
+  .bg-grad-primary {
+    @apply rounded-t-lg justify-center bg-gradient-to-r from-primary to-black py-2 text-white
+  }
+}
+
+.react-calendar {
+  width: 100% !important;
+  border: none !important;
+  padding: 10px;
+  border-radius: 0.5rem;
+}
