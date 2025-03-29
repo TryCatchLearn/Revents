@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
-import {format} from 'date-fns';
+import {format, formatDistanceToNow} from 'date-fns';
 
 export function debounce<T extends unknown[], U>(
   callback: (...args: T) => PromiseLike<U> | U,
@@ -41,4 +41,10 @@ export function handleError(error: unknown) {
 
 export const formatDateTime = (date: string) => {
   return format(new Date(date), 'dd MMM yyyy h:mm a');
+}
+
+export const timeAgo = (date: string | number) => {
+  return formatDistanceToNow(new Date(date), {
+    addSuffix: true,
+  })
 }
