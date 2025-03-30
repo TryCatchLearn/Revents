@@ -1,7 +1,9 @@
+import { useFollowings } from "../../../lib/hooks/useFollowing";
 import { AppEvent } from "../../../lib/types";
 import { Link } from "react-router";
 
-export default function EventDetailedSidebar({event}: {event: AppEvent}) {
+export default function EventDetailedSidebar({ event }: { event: AppEvent }) {
+    const { followingIds } = useFollowings();
 
     return (
         <div className="card bg-base-100">
@@ -20,10 +22,17 @@ export default function EventDetailedSidebar({event}: {event: AppEvent}) {
                                             <img src={attendee?.photoURL || '/user.png'} alt="user avatar" />
                                         </div>
                                     </div>
-                                    <span className="text-2xl">{attendee.displayName}</span>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-2xl">{attendee.displayName}</span>
+                                        {followingIds.includes(attendee.id) && (
+                                            <span className="badge badge-primary badge-soft">
+                                                Following
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                                 {event.hostUid === attendee.id &&
-                                <div className="badge badge-info">Host</div>}
+                                    <div className="badge badge-info">Host</div>}
 
                             </div>
                             {index < event.attendees.length - 1 && (

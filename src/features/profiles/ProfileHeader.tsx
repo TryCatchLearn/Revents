@@ -1,10 +1,12 @@
+import clsx from "clsx";
+import { useFollowings } from "../../lib/hooks/useFollowing";
 import { useAppSelector } from "../../lib/stores/store";
 import { Profile } from "../../lib/types";
 
 export default function ProfileHeader({ profile }: { profile: Profile }) {
+    const { unfollowUser, followUser, loading, isFollowing } = useFollowings(profile.id);
     const currentUser = useAppSelector(state => state.account.user);
     const isCurrentUser = currentUser?.uid === profile.id;
-    const following = false;
 
     return (
         <div className="card w-full bg-base-100">
@@ -18,13 +20,23 @@ export default function ProfileHeader({ profile }: { profile: Profile }) {
                     <div className="flex flex-col items-start gap-3">
                         <div className="flex items-center gap-3">
                             <h2 className="text-2xl font-semibold">{profile.displayName}</h2>
-                            {following && !isCurrentUser &&
-                            <div className="badge badge-primary">Following</div>}
+                            {isFollowing && !isCurrentUser &&
+                                <div className="badge badge-primary">Following</div>}
                         </div>
                         {!isCurrentUser &&
-                        <button className="btn btn-outline btn-wide">
-                            Follow
-                        </button>}
+                            <button
+                                onClick={isFollowing 
+                                    ? () => unfollowUser(profile) 
+                                    : () => followUser(profile)}
+                                disabled={loading}
+                                className={clsx("btn btn-outline btn-wide", {
+                                    'btn-primary': !isFollowing,
+                                    'btn-error': isFollowing
+                                })}>
+                                {loading && <span className="loading loading-spinner"></span>}
+                                {isFollowing ? 'Unfollow' : 'Follow'}
+                            </button>
+                        }
                     </div>
                 </div>
 
@@ -32,11 +44,11 @@ export default function ProfileHeader({ profile }: { profile: Profile }) {
                     <div className="stats">
                         <div className="stat place-items-center">
                             <div className="stat-title text-xl">Followers</div>
-                            <div className="stat-value text-7xl">10</div>
+                            <div className="stat-value text-7xl">{profile.followerCount || 0}</div>
                         </div>
                         <div className="stat place-items-center">
                             <div className="stat-title text-xl">Following</div>
-                            <div className="stat-value text-7xl">42</div>
+                            <div className="stat-value text-7xl">{profile.followingCount || 0}</div>
                         </div>
                     </div>
                 </div>
