@@ -14,7 +14,7 @@ export default function ProfilePhotos({ profile, editMode }: Props) {
         <div className='grid grid-cols-5 gap-3 h-[50vh] overflow-auto'>
           <img
             className="rounded-lg w-full"
-            src={profile.photoURL}
+            src={profile.photoURL || '/user.png'}
             alt="user main image" />
           {Array.from({ length: 20 }).map((_, index) => (
             <img

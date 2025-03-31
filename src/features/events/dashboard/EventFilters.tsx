@@ -27,28 +27,31 @@ export default function EventFilters({setFilter, filter}: Props) {
         {key: 'hosting', label: "I'm hosting", icon: AcademicCapIcon},
     ];
 
-    useEffect(() => {
+    const handleFilterChange = ({query, startDate}: {query?: string, startDate?: string}) => {
         if (!currentUser) return;
 
         const q: QueryOptions[] = [
-            {attribute: 'date', operator: '>=', value: filter.startDate, isDate: true}
+            {attribute: 'date', operator: '>=', value: startDate 
+                || new Date().toISOString(), isDate: true}
         ];
 
-        if (filter.query === 'going') {
+        if (query === 'going') {
             q.push({attribute: 'attendeeIds', operator: 'array-contains', value: currentUser.uid})
-        } else if (filter.query === 'hosting') {
+        } else if (query === 'hosting') {
             q.push({attribute: 'hostUid', operator: '==', value: currentUser.uid})
         }
 
         dispatch(setCollectionOptions({
             options: {
                 queries: q,
-                sort: {attribute: 'date', direction: 'asc'}
+                sort: {attribute: 'date', direction: 'asc'},
+                pageNumber: 1,
             },
             path: 'events'
         }))
-
-    }, [currentUser, dispatch, filter])
+        setFilter({...filter, query: query || 'all', 
+            startDate: startDate || new Date().toISOString()})
+    };
 
     return (
         <div className="flex flex-col gap-4 w-full">
@@ -59,7 +62,7 @@ export default function EventFilters({setFilter, filter}: Props) {
                 <ul className="list space-y-2 py-2">
                     {items.map(({key, label, icon: Icon}) => (
                         <li 
-                            onClick={() => setFilter({...filter, query: key})}
+                            onClick={() => handleFilterChange({query: key})}
                             key={key}
                             className={clsx("list-row w-full items-center py-2 hover:bg-primary/20 cursor-pointer", {
                                 'text-primary font-bold': filter.query === key
@@ -79,7 +82,7 @@ export default function EventFilters({setFilter, filter}: Props) {
                     onActiveStartDateChange={({activeStartDate}) => 
                         setCalendarViewDate(activeStartDate as Date)}
                     onChange={(value) => {
-                        setFilter({...filter, startDate: (value as Date).toISOString()})
+                        handleFilterChange({startDate: (value as Date).toISOString()})
                     }}
                 />
             </div>

@@ -13,6 +13,13 @@ export default function ProfileContent({ profile }: { profile: Profile }) {
     const [selectedItem, setSelectedItem] = useState('about');
     const [editMode, setEditMode] = useState(false);
     const currentUser = useAppSelector(state => state.account.user);
+    const [selectedEventTab, setSelectedEventTab] = useState('future');
+
+    const eventTabs = [
+        { id: 'future', label: 'Future Events' },
+        { id: 'past', label: 'Past Events' },
+        { id: 'hosting', label: 'Hosting' }
+      ]
 
     const followOptions = ['all', 'following', 'followers'];
 
@@ -40,7 +47,7 @@ export default function ProfileContent({ profile }: { profile: Profile }) {
             case 'photos':
                 return <ProfilePhotos profile={profile} editMode={editMode} />;
             case 'events':
-                return <ProfileEvents profile={profile} />;
+                return <ProfileEvents profile={profile} selectedTab={selectedEventTab} />;
             case 'members':
                 return <ProfileMembers profile={profile} followFilter={followFilter} />;
             default:
@@ -98,6 +105,21 @@ export default function ProfileContent({ profile }: { profile: Profile }) {
                                 />
                             ))}
                         </div>
+                    )}
+                    {selectedItem === 'events' && (
+                        <div className="tabs tabs-box">
+                        {eventTabs.map(tab => (
+                          <a
+                            key={tab.id}
+                            onClick={() => setSelectedEventTab(tab.id)}
+                            className={clsx('tab', {
+                              'tab-active': selectedEventTab === tab.id
+                            })}
+                          >
+                            {tab.label}
+                          </a>
+                        ))}
+                      </div>
                     )}
                 </div>
 

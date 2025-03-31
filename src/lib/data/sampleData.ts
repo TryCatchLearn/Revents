@@ -118,5 +118,175 @@ export const events: AppEvent[] = [
             {id: users[0].uid, displayName: users[0].displayName, photoURL: users[0].photoURL, isHost: false}
         ],
         attendeeIds: [users[0].uid, users[2].uid]
+    },
+    {
+        id: 'activity-f5',
+        title: "Future Activity 5",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 5)).toISOString(),
+        description: "Activity 5 months in future",
+        category: "culture",
+        city: "New York",
+        venue: "Metropolitan Museum of Art",
+        latitude: 40.779437,
+        longitude: -73.963244,
+        hostUid: users[0].uid,
+        attendees: [
+            {id: users[0].uid, displayName: users[0].displayName, photoURL: users[0].photoURL, isHost: true},
+            {id: users[1].uid, displayName: users[1].displayName, photoURL: users[1].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[0].uid, users[1].uid]
+    },
+    {
+        id: 'activity-f6',
+        title: "Future Activity 6",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString(),
+        description: "Activity 6 months in future",
+        category: "music",
+        city: "Tokyo",
+        venue: "Tokyo Dome",
+        latitude: 35.705639,
+        longitude: 139.751891,
+        hostUid: users[2].uid,
+        attendees: [
+            {id: users[2].uid, displayName: users[2].displayName, photoURL: users[2].photoURL, isHost: true},
+            {id: users[0].uid, displayName: users[0].displayName, photoURL: users[0].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[2].uid, users[0].uid]
+    },
+    {
+        id: 'activity-f7',
+        title: "Future Activity 7",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 7)).toISOString(),
+        description: "Activity 7 months in future",
+        category: "drinks",
+        city: "Sydney",
+        venue: "Opera Bar",
+        latitude: -33.8567844,
+        longitude: 151.2152967,
+        hostUid: users[1].uid,
+        attendees: [
+            {id: users[1].uid, displayName: users[1].displayName, photoURL: users[1].photoURL, isHost: true},
+            {id: users[2].uid, displayName: users[2].displayName, photoURL: users[2].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[1].uid, users[2].uid]
+    },
+    {
+        id: 'activity-f8',
+        title: "Future Activity 8",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 8)).toISOString(),
+        description: "Activity 8 months in future",
+        category: "culture",
+        city: "Rome",
+        venue: "Colosseum",
+        latitude: 41.890251,
+        longitude: 12.492373,
+        hostUid: users[0].uid,
+        attendees: [
+            {id: users[0].uid, displayName: users[0].displayName, photoURL: users[0].photoURL, isHost: true},
+            {id: users[1].uid, displayName: users[1].displayName, photoURL: users[1].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[0].uid, users[1].uid]
+    },
+    {
+        id: 'activity-f9',
+        title: "Future Activity 9",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 9)).toISOString(),
+        description: "Activity 9 months in future",
+        category: "music",
+        city: "Berlin",
+        venue: "Berghain",
+        latitude: 52.511244,
+        longitude: 13.444297,
+        hostUid: users[2].uid,
+        attendees: [
+            {id: users[2].uid, displayName: users[2].displayName, photoURL: users[2].photoURL, isHost: true},
+            {id: users[0].uid, displayName: users[0].displayName, photoURL: users[0].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[2].uid, users[0].uid]
+    },
+    {
+        id: 'activity-f10',
+        title: "Future Activity 10",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 10)).toISOString(),
+        description: "Activity 10 months in future",
+        category: "drinks",
+        city: "Cape Town",
+        venue: "The Gin Bar",
+        latitude: -33.925839,
+        longitude: 18.42322,
+        hostUid: users[1].uid,
+        attendees: [
+            {id: users[1].uid, displayName: users[1].displayName, photoURL: users[1].photoURL, isHost: true},
+            {id: users[2].uid, displayName: users[2].displayName, photoURL: users[2].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[1].uid, users[2].uid]
+    },
+    {
+        id: 'activity-f11',
+        title: "Future Activity 11",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 11)).toISOString(),
+        description: "Activity 11 months in future",
+        category: "culture",
+        city: "Beijing",
+        venue: "Forbidden City",
+        latitude: 39.9163447,
+        longitude: 116.3971546,
+        hostUid: users[0].uid,
+        attendees: [
+            {id: users[0].uid, displayName: users[0].displayName, photoURL: users[0].photoURL, isHost: true},
+            {id: users[1].uid, displayName: users[1].displayName, photoURL: users[1].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[0].uid, users[1].uid]
+    },
+    {
+        id: 'activity-f12',
+        title: "Future Activity 12",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 12)).toISOString(),
+        description: "Activity 12 months in future",
+        category: "music",
+        city: "Rio de Janeiro",
+        venue: "Maracanã Stadium",
+        latitude: -22.91216,
+        longitude: -43.230182,
+        hostUid: users[2].uid,
+        attendees: [
+            {id: users[2].uid, displayName: users[2].displayName, photoURL: users[2].photoURL, isHost: true},
+            {id: users[0].uid, displayName: users[0].displayName, photoURL: users[0].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[2].uid, users[0].uid]
+    },
+    {
+        id: 'activity-f13',
+        title: "Future Activity 13",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 13)).toISOString(),
+        description: "Activity 13 months in future",
+        category: "drinks",
+        city: "Bangkok",
+        venue: "Sky Bar",
+        latitude: 13.723419,
+        longitude: 100.5331,
+        hostUid: users[1].uid,
+        attendees: [
+            {id: users[1].uid, displayName: users[1].displayName, photoURL: users[1].photoURL, isHost: true},
+            {id: users[2].uid, displayName: users[2].displayName, photoURL: users[2].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[1].uid, users[2].uid]
+    },
+    {
+        id: 'activity-f14',
+        title: "Future Activity 14",
+        date: new Date(new Date().setMonth(new Date().getMonth() + 14)).toISOString(),
+        description: "Activity 14 months in future",
+        category: "culture",
+        city: "Moscow",
+        venue: "Red Square",
+        latitude: 55.753913,
+        longitude: 37.620836,
+        hostUid: users[0].uid,
+        attendees: [
+            {id: users[0].uid, displayName: users[0].displayName, photoURL: users[0].photoURL, isHost: true},
+            {id: users[1].uid, displayName: users[1].displayName, photoURL: users[1].photoURL, isHost: false}
+        ],
+        attendeeIds: [users[0].uid, users[1].uid]
     }
 ];
