@@ -10,8 +10,8 @@ export default function EventDetailedHeader({ event }: { event: AppEvent }) {
     const { host, isGoing, isHost, toggleAttendance, cancelToggle, shouldShowCountdown } = useEvent(event);
 
     return (
-        <div className="card bg-base-100">
-            <figure className="h-64 rounded-lg">
+        <div className="card bg-base-100 image-full">
+            <figure className="h-64">
                 <img
                     src={`/categoryImages/${event.category}.jpg`}
                     alt="event category image"

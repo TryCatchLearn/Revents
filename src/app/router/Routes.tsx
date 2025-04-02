@@ -7,20 +7,23 @@ import EventForm from "../../features/events/form/EventForm";
 import LoginForm from "../../features/account/LoginForm";
 import RegisterForm from "../../features/account/RegisterForm";
 import ProfilePage from "../../features/profiles/ProfilePage";
+import RequireAuth from "./RequireAuth";
 
 export const router = createBrowserRouter([
     {
         path: '/',
         element: <App />,
         children: [
+            {element: <RequireAuth />, children: [
+                {path: 'manage/:id', element: <EventForm />},
+                {path: 'createEvent', element: <EventForm />},
+                {path: 'profiles/:id', element: <ProfilePage />}
+            ]},
             {path: '/', element: <HomePage />},
             {path: 'events', element: <EventDashboard />},
             {path: 'events/:id', element: <EventDetails />},
-            {path: 'manage/:id', element: <EventForm />},
-            {path: 'createEvent', element: <EventForm />},
             {path: 'login', element: <LoginForm />},
             {path: 'register', element: <RegisterForm />},
-            {path: 'profiles/:id', element: <ProfilePage />},
         ]
     }
 ])

@@ -28,16 +28,16 @@ export default function EventFilters({setFilter, filter}: Props) {
     ];
 
     const handleFilterChange = ({query, startDate}: {query?: string, startDate?: string}) => {
-        if (!currentUser) return;
+        if (!currentUser && query) return;
 
         const q: QueryOptions[] = [
             {attribute: 'date', operator: '>=', value: startDate 
-                || new Date().toISOString(), isDate: true}
+                || filter.startDate, isDate: true}
         ];
 
-        if (query === 'going') {
+        if (query === 'going' && currentUser) {
             q.push({attribute: 'attendeeIds', operator: 'array-contains', value: currentUser.uid})
-        } else if (query === 'hosting') {
+        } else if (query === 'hosting' && currentUser) {
             q.push({attribute: 'hostUid', operator: '==', value: currentUser.uid})
         }
 
@@ -50,12 +50,13 @@ export default function EventFilters({setFilter, filter}: Props) {
             path: 'events'
         }))
         setFilter({...filter, query: query || 'all', 
-            startDate: startDate || new Date().toISOString()})
+            startDate: startDate || filter.startDate});
     };
 
     return (
         <div className="flex flex-col gap-4 w-full">
-            <div className="card bg-base-100 w-full rounded-lg">
+            {currentUser &&
+            <div className="card bg-base-100 w-full">
                 <div className="card-title font-semibold bg-grad-primary">
                     Event filters
                 </div>
@@ -73,8 +74,8 @@ export default function EventFilters({setFilter, filter}: Props) {
                         </li>
                     ))}
                 </ul>
-            </div>
-            <div className="card bg-base-100 w-full rounded-lg">
+            </div>}
+            <div className="card bg-base-100 w-full">
                 <div className="card-title bg-grad-primary">Start date</div>
                 <Calendar 
                     value={new Date(filter.startDate)}

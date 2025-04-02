@@ -26,7 +26,7 @@ export default function EventCard({ event }: Props) {
                         </figure>
                         <div>
                             <h2 className="card-title">{event.title}</h2>
-                            <p className="text-sm text-neutral">Hosted by {host?.displayName}</p>
+                            <p className="text-sm">Hosted by {host?.displayName}</p>
                         </div>
                     </div>
 
@@ -50,8 +50,12 @@ export default function EventCard({ event }: Props) {
                                 {isHost && <span className="badge badge-info badge-soft">Hosting</span>}
                                 {!isHost && isGoing && <span className="badge badge-success badge-soft">
                                     Attending</span>}
+                                {count > 0 &&
+                                <div className="badge badge-primary badge-soft">
+                                    {count} {count > 1 ? 'people' : 'person'} going that you follow
+                                </div>}
                             </div>
-                            <div className="text-primary">People you follow attending: {count}</div>
+
                         </div>
                     </div>
                     <div className="flex gap-3">

@@ -1,13 +1,13 @@
+import { Link } from "react-router";
 import { useFollowings } from "../../../lib/hooks/useFollowing";
 import { AppEvent } from "../../../lib/types";
-import { Link } from "react-router";
 
 export default function EventDetailedSidebar({ event }: { event: AppEvent }) {
     const { followingIds } = useFollowings();
 
     return (
         <div className="card bg-base-100">
-            <div className="card-title rounded-t-lg justify-center bg-gradient-to-r from-primary to-black py-2 text-white">
+            <div className="card-title bg-grad-primary">
                 {event?.attendees.length} People going
             </div>
             <div className="card-body">
@@ -36,10 +36,9 @@ export default function EventDetailedSidebar({ event }: { event: AppEvent }) {
 
                             </div>
                             {index < event.attendees.length - 1 && (
-                                <div className="divider my-0"></div>
+                                <div className="divider mb-0"></div>
                             )}
                         </Link>
-
                     ))}
 
                 </div>
