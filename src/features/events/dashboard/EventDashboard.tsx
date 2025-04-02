@@ -40,7 +40,7 @@ export default function EventDashboard() {
     <div className="flex flex-row w-full gap-6">
       <div className="w-2/3">
         <div className="flex flex-col gap-4">
-          {!loadedInitial && appEvents?.length === 0 ? (
+          {!loading && appEvents?.length === 0 ? (
             <EmptyState message="No events for this filter" onReset={resetFilters} />
           ) : (
             <div className="flex flex-col gap-3">
