@@ -32,8 +32,13 @@ export const accountSlice = createSlice({
         } ,
         signOut: (state) => {
             state.user = null;
+        },
+        setImage: (state, action: PayloadAction<string>) => {
+            if (state.user) {
+                state.user.photoURL = action.payload;
+            }
         }
     }
 });
 
-export const { signIn, signOut } = accountSlice.actions;
+export const { signIn, signOut, setImage } = accountSlice.actions;

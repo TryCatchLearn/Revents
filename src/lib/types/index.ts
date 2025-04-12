@@ -18,6 +18,12 @@ export type Profile = {
     followingCount: number;
 }
 
+export type Photo = {
+    id: string;
+    url: string;
+    storageId: string;
+}
+
 export type AppEvent = {
     id: string;
     title: string;
