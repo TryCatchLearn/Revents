@@ -45,7 +45,8 @@ export default function ProfileContent({ profile }: { profile: Profile }) {
     const renderContent = () => {
         switch (selectedItem) {
             case 'photos':
-                return <ProfilePhotos profile={profile} editMode={editMode} />;
+                return <ProfilePhotos profile={profile} editMode={editMode} 
+                    setEditMode={setEditMode} />;
             case 'events':
                 return <ProfileEvents profile={profile} selectedTab={selectedEventTab} />;
             case 'members':
