@@ -19,7 +19,7 @@ export const getQuery = (path: string, options?: CollectionOptions,
         q = query(q, orderBy(attribute, direction));
     }
 
-    if (options?.limit && paginate) {
+    if (options?.limit) {
         q = query(q, limit(options.limit));
     }
 
