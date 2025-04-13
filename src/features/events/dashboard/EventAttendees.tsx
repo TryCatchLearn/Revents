@@ -20,7 +20,7 @@ export default function EventAttendees({ attendees }: Props) {
           })}
           key={attendee.id}
         >
-          <img src={attendee.photoURL || '/user.png'} alt="attendee avatar" />
+          <img className="aspect-square object-cover" src={attendee.photoURL || '/user.png'} alt="attendee avatar" />
         </AuthLink>
       ))}
     </div>

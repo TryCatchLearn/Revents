@@ -6,11 +6,12 @@ import { themeChange } from "theme-change";
 import { PaintBrushIcon } from "@heroicons/react/24/outline";
 import { themes } from "../../../lib/util/themes";
 import clsx from "clsx";
+import NewsFeed from "./Newsfeed";
 
 export default function Navbar() {
     const user = useAppSelector(state => state.account.user);
     const loading = useAppSelector(state => state.firestore.loading);
-    const [selectedTheme, setSelectedTheme] = 
+    const [selectedTheme, setSelectedTheme] =
         useState(localStorage.getItem('theme') || 'light');
 
     useEffect(() => {
@@ -64,7 +65,11 @@ export default function Navbar() {
                         </ul>
                     </div>
                     {user ? (
-                        <UserMenu />
+                        <>
+                            <NewsFeed />
+                            <UserMenu />
+                        </>
+
                     ) : (
                         <>
                             <Link to='/login' className="btn btn-outline btn-info">Login</Link>

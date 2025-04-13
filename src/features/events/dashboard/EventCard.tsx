@@ -21,6 +21,7 @@ export default function EventCard({ event }: Props) {
                     <div className="flex gap-3 items-center">
                         <figure className="card-figure w-14 rounded-lg">
                             <img
+                                className="aspect-square object-cover"
                                 src={host?.photoURL || '/user.png'}
                                 alt="user avatar" />
                         </figure>

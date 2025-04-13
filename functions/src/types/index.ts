@@ -1,5 +1,7 @@
 import { OrderByDirection, Timestamp, WhereFilterOp } from "firebase/firestore";
 
+export type Status = 'added' | 'removed' | 'created';
+
 export type AppUser = {
     uid: string;
     displayName: string;
@@ -105,15 +107,4 @@ export type ChatComment = {
     uid: string;
     text: string;
     date: string;
-}
-
-export type NewsItem = {
-    id: string;
-    displayName: string;
-    photoURL?: string;
-    userUid: string;
-    eventId: string;
-    title: string;
-    created: string;
-    status: string;
 }
