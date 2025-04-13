@@ -1,10 +1,8 @@
 import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 import * as logger from "firebase-functions/logger";
 import { AppEvent, Attendee, Status } from './types';
-import { initializeApp } from 'firebase-admin/app';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 
-initializeApp();
 const db = getFirestore();
 
 export const updateNews = onDocumentWritten('events/{docId}', async (fbEvent) => {
