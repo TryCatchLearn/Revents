@@ -44,7 +44,7 @@ export default function PlaceInput<T extends FieldValues>(props: Props<T>) {
 
     const handleChange = async (value: string) => {
         setInputValue(value);
-        field.onChange(value);
+        field.onChange({venue: value});
         await fetchSuggestions(value);
     }
 
