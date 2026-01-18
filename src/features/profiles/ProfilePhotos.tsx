@@ -3,14 +3,13 @@ import PhotoUpload from "../../app/shared/components/PhotoUpload";
 import { useFirestoreActions } from "../../lib/hooks/useFirestoreActions";
 import { Photo, Profile } from "../../lib/types"
 import { handleError } from "../../lib/util/util";
-import { auth, storage } from "../../lib/firebase/firebase";
+import { auth } from "../../lib/firebase/firebase";
 import { useCollection } from "../../lib/hooks/useCollection";
 import StarButton from "../../app/shared/components/StarButton";
 import DeleteButton from "../../app/shared/components/DeleteButton";
 import { useState } from "react";
 import { useAppDispatch } from "../../lib/stores/store";
 import { setImage } from "../account/accountSlice";
-import { deleteObject, ref } from "firebase/storage";
 import ImageModal from "../../app/shared/components/ImageModal";
 import { openImageModal } from "../../lib/util/modalEvent";
 
@@ -63,8 +62,9 @@ export default function ProfilePhotos({ profile, editMode, setEditMode }: Props)
   const handleDeleteImage = async (photo: Photo) => {
     setStatus(photo.id + 'delete');
     try {
-      const storageRef = ref(storage, `${profile.id}/user_images/${photo.storageId}`);
-      await deleteObject(storageRef);
+      // Note: Cloudinary images remain in storage but are removed from the user's photo collection
+      // To delete from Cloudinary, you'll need to implement a server-side endpoint
+      // For now, we just remove the reference from Firestore
       await remove(photo.id);
     } catch (error) {
       handleError(error);

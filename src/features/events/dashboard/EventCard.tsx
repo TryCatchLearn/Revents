@@ -4,6 +4,7 @@ import EventAttendees from "./EventAttendees";
 import { useEvent } from "../../../lib/hooks/useEvent";
 import { formatDateTime } from "../../../lib/util/util";
 import { useFollowings } from "../../../lib/hooks/useFollowing";
+import Avatar from "../../../app/shared/components/Avatar";
 
 type Props = {
     event: AppEvent;
@@ -19,12 +20,12 @@ export default function EventCard({ event }: Props) {
             <div className="card-body">
                 <div className="flex justify-between items-center">
                     <div className="flex gap-3 items-center">
-                        <figure className="card-figure w-14 rounded-lg">
-                            <img
-                                className="aspect-square object-cover"
-                                src={host?.photoURL || '/user.png'}
-                                alt="user avatar" />
-                        </figure>
+                        <Avatar
+                            src={host?.photoURL}
+                            displayName={host?.displayName}
+                            alt="host avatar"
+                            size="sm"
+                        />
                         <div>
                             <h2 className="card-title">{event.title}</h2>
                             <p className="text-sm">Hosted by {host?.displayName}</p>

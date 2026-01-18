@@ -3,8 +3,7 @@ import 'filepond/dist/filepond.min.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { useState } from 'react';
-import { storage } from '../../../lib/firebase/firebase';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { cloudinaryConfig, getCloudinaryUploadUrl } from '../../../lib/cloudinary/cloudinary';
 
 // Register the plugins
 registerPlugin(FilePondPluginImagePreview);
@@ -24,27 +23,40 @@ export default function PhotoUpload({uploadPhoto, path}: Props) {
                 allowMultiple={false}
                 maxFiles={1}
                 server={{
-                    process: (_fieldName, file, _metadata, load, error, progress) => {
+                    process: (_fieldName, file, _metadata, load, error, progress, _abort) => {
                         const timestamp = Date.now();
                         const uploadId = `${timestamp}-${file.name}`;
-                        const storageRef = ref(storage, `${path}/${uploadId}`);
-                        const task = uploadBytesResumable(storageRef, file);
 
-                        task.on(
-                            'state_changed',
-                            snap => {
-                                progress(true, snap.bytesTransferred, snap.totalBytes);
-                            },
-                            err => {
-                                error(err.message)
-                            },
-                            () => {
-                                getDownloadURL(task.snapshot.ref).then(async (url) => {
-                                    uploadPhoto(url, uploadId);
-                                    load(url);
-                                })
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('upload_preset', cloudinaryConfig.uploadPreset);
+                        formData.append('folder', path);
+                        formData.append('public_id', uploadId);
+
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', getCloudinaryUploadUrl(), true);
+
+                        xhr.upload.onprogress = (e) => {
+                            if (e.lengthComputable) {
+                                progress(true, e.loaded, e.total);
                             }
-                        )
+                        };
+
+                        xhr.onload = () => {
+                            if (xhr.status === 200) {
+                                const response = JSON.parse(xhr.responseText);
+                                uploadPhoto(response.secure_url, response.public_id);
+                                load(response.secure_url);
+                            } else {
+                                error('Upload failed');
+                            }
+                        };
+
+                        xhr.onerror = () => {
+                            error('Upload failed');
+                        };
+
+                        xhr.send(formData);
                     }
                 }}
                 name="files"

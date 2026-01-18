@@ -23,6 +23,10 @@ export default function NewsFeed() {
     const [previousNews, setPreviousNews] = useState<NewsItem[] | null>(null);
     const isInitialLoad = useRef(true);
 
+    const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/user.png';
+  };
+
     useEffect(() => {
         if (isInitialLoad.current) {
             isInitialLoad.current = false;
@@ -53,7 +57,7 @@ export default function NewsFeed() {
 
                     return (
                         <li className="list-row">
-                            <div><img className="size-10 rounded-box" src={item.photoURL} alt='user avatar' /></div>
+                            <div><img className="size-10 rounded-box" src={item.photoURL || '/user.png'} alt='user avatar' onError={handleError} /></div>
                             <div>
                                 <div>{item.displayName} {message}</div>
                                 <div className="text-xs uppercase font-semibold opacity-60">

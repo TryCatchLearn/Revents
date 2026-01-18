@@ -13,7 +13,7 @@ import { getStorage } from "firebase/storage";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: "revents-v3-course.firebaseapp.com",
+  authDomain: "revents.trycatchlearn.com",
   projectId: "revents-v3-course",
   databaseURL: "https://revents-v3-course-default-rtdb.firebaseio.com",
   storageBucket: "revents-v3-course.firebasestorage.app",

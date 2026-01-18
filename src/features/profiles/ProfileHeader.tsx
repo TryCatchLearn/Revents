@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { useFollowings } from "../../lib/hooks/useFollowing";
 import { useAppSelector } from "../../lib/stores/store";
 import { Profile } from "../../lib/types";
+import Avatar from "../../app/shared/components/Avatar";
 
 export default function ProfileHeader({ profile }: { profile: Profile }) {
     const { unfollowUser, followUser, loading, isFollowing } = useFollowings(profile.id);
@@ -12,11 +13,12 @@ export default function ProfileHeader({ profile }: { profile: Profile }) {
         <div className="card w-full bg-base-100">
             <div className="flex w-full py-3 px-6 justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="avatar">
-                        <div className="w-28 h-28 rounded-full">
-                            <img src={profile?.photoURL || "/user.png"} referrerPolicy="no-referrer" alt="user avatar" />
-                        </div>
-                    </div>
+                    <Avatar
+                        src={profile?.photoURL}
+                        displayName={profile.displayName}
+                        alt="profile avatar"
+                        size="lg"
+                    />
                     <div className="flex flex-col items-start gap-3">
                         <div className="flex items-center gap-3">
                             <h2 className="text-2xl font-semibold">{profile.displayName}</h2>

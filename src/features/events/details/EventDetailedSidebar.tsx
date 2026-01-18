@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useFollowings } from "../../../lib/hooks/useFollowing";
 import { AppEvent } from "../../../lib/types";
+import Avatar from "../../../app/shared/components/Avatar";
 
 export default function EventDetailedSidebar({ event }: { event: AppEvent }) {
     const { followingIds } = useFollowings();
@@ -17,11 +18,12 @@ export default function EventDetailedSidebar({ event }: { event: AppEvent }) {
                         <Link to={`/profiles/${attendee.id}`} key={attendee.id}>
                             <div className="flex gap-3 align-middle justify-between items-center">
                                 <div className="flex gap-3 items-center">
-                                    <div className="avatar">
-                                        <div className="w-16 rounded">
-                                            <img src={attendee?.photoURL || '/user.png'} alt="user avatar" />
-                                        </div>
-                                    </div>
+                                    <Avatar
+                                        src={attendee?.photoURL}
+                                        displayName={attendee.displayName}
+                                        alt="attendee avatar"
+                                        size="md"
+                                    />
                                     <div className="flex flex-col gap-1">
                                         <span className="text-2xl">{attendee.displayName}</span>
                                         {followingIds.includes(attendee.id) && (
